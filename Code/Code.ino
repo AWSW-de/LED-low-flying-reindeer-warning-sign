@@ -13,7 +13,7 @@
 // ###########################################################################################################################################
 // # Code version:
 // ###########################################################################################################################################
-String Code_Version = "V1.0.0";
+String Code_Version = "V1.1.0";
 
 
 // ###########################################################################################################################################
@@ -27,6 +27,14 @@ String Code_Version = "V1.0.0";
 
 
 // ###########################################################################################################################################
+// # Code settings:
+// ###########################################################################################################################################
+int UseStartupRGBtest = 1;  // Startup RGB test to check the LEDs
+int pixels_intensity = 10;  // Maximum LED instensity (0-255) --> Use low values to save battery power !!!
+int flashtime = 75;         // Speed of the flash animation (smaller intensity value --> bigger value for the flashtime)
+
+
+// ###########################################################################################################################################
 // # Hardware settings:
 // ###########################################################################################################################################
 // How many LEDs are in your neon LED strip:
@@ -34,9 +42,7 @@ String Code_Version = "V1.0.0";
 // Data pin - here D5 on the Wemos D1 mini:
 #define DATA_PIN 14
 // Init LEDs:
-Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUM_LEDS, DATA_PIN, NEO_RGB + NEO_KHZ800);
-// Instensity maximum (0-255):
-int pixels_intensity = 32;
+Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUM_LEDS, DATA_PIN, NEO_GRB + NEO_KHZ800);
 
 
 // ###########################################################################################################################################
@@ -49,10 +55,43 @@ void setup() {
   // Set LED brightness:
   pixels.setBrightness(pixels_intensity);
 
-  // Set all LEDs to red:
-  for (int i = 0; i < NUM_LEDS - 1; i++) {
-    pixels.setPixelColor(i, pixels.Color(255, 0, 0));
+  // RGB LED test:
+  if (UseStartupRGBtest == 1) {
+    // Set all LEDs to OFF:
+    for (int i = 0; i <= NUM_LEDS - 1; i++) {
+      pixels.setPixelColor(i, pixels.Color(0, 0, 0));
+    }
+    pixels.show();
+    delay(1000);
+
+    // Set all LEDs to red:
+    for (int i = 0; i <= NUM_LEDS - 1; i++) {
+      pixels.setPixelColor(i, pixels.Color(255, 0, 0));
+    }
+    pixels.show();
+    delay(1000);
+
+    // Set all LEDs to green:
+    for (int i = 0; i <= NUM_LEDS - 1; i++) {
+      pixels.setPixelColor(i, pixels.Color(0, 255, 0));
+    }
+    pixels.show();
+    delay(1000);
+
+    // Set all LEDs to blue:
+    for (int i = 0; i <= NUM_LEDS - 1; i++) {
+      pixels.setPixelColor(i, pixels.Color(0, 0, 255));
+    }
+    pixels.show();
+    delay(1000);
   }
+
+  // Set all LEDs to OFF:
+  for (int i = 0; i <= NUM_LEDS - 1; i++) {
+    pixels.setPixelColor(i, pixels.Color(0, 0, 0));
+  }
+  pixels.show();
+  delay(1000);
 }
 
 
@@ -60,18 +99,25 @@ void setup() {
 // # Runtime function:
 // ###########################################################################################################################################
 void loop() {
+  // Set intensity from 0 to max:
   for (int i = 0; i <= pixels_intensity; i++) {
     pixels.setBrightness(i);
+    for (int x = 0; x <= NUM_LEDS - 1; x++) {
+      pixels.setPixelColor(x, pixels.Color(255, 0, 0));
+    }
     pixels.show();
-    delay(5);
+    delay(flashtime);
   }
-  delay(250);
-  for (int i = pixels_intensity; i >= 0; i = i - 1) {
+
+  // Set intensity from max to 0:
+  for (int i = pixels_intensity; i >= 0; i--) {
     pixels.setBrightness(i);
+    for (int x = 0; x <= NUM_LEDS - 1; x++) {
+      pixels.setPixelColor(x, pixels.Color(255, 0, 0));
+    }
     pixels.show();
-    delay(5);
+    delay(flashtime);
   }
-  delay(250);
 }
 
 
