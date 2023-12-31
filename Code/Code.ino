@@ -43,13 +43,6 @@ int pixels_intensity = 32;
 // # Startup function:
 // ###########################################################################################################################################
 void setup() {
-  Serial.begin(115200);
-  delay(1000);
-  Serial.println("######################################################################");
-  Serial.print("#  startup of version: ");
-  Serial.println(Code_Version);
-  Serial.println("######################################################################");
-
   // Initialize the LED strip:
   pixels.begin();
 
